@@ -1,0 +1,25 @@
+{
+  "package": {},
+  "code": {
+    "detect_inapproperate_marketing.prompty": {
+      "type": "llm",
+      "inputs": {
+        "question": {
+          "type": [
+            "string"
+          ]
+        },
+        "answer": {
+          "type": [
+            "string"
+          ]
+        },
+        "context": {
+          "type": [
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}

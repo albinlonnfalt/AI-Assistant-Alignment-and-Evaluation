@@ -1,0 +1,51 @@
+---
+name: Synthetic Data Generator
+description: Generate synthetic question to a chatbot
+model:
+  api: chat
+  configuration:
+    type: azure_openai
+    azure_deployment: gpt-4o
+    api_version: 2023-07-01-preview
+  parameters:
+    max_tokens: 128
+    temperature: 0.9
+    frequency_penalty: 0.5
+inputs:
+  context:
+    type: string
+  topic:
+    type: object
+  tone:
+    type: string
+  language:
+    type: string
+  additional_instructions:
+    type: string
+  question_length:
+    type: number
+sample:
+    context: "A customer service chat"
+    topic: "customer service"
+    tone: "friendly"
+    language: "english"
+    additional_instructions: "Please make sure the questions are relevant to the topic and are in a friendly tone."
+---
+system:
+You are an AI assistant. You task is to generate potential questions to a customer service chat. Be very creative and try to think of all possible questions that a customer might ask. 
+
+Answer only with the question. Do not include anything else in your response.
+
+You are only allowed to answer with one question.
+
+user:
+
+# Context:
+{{context}}
+
+# Question Guidelines:
+- The generated questions should be related to the topic of {{topic}}
+- The tone of the questions should be {{tone}}
+- The questions should be in {{language}}
+- Additional instructions {{additional_instructions}}
+- The question should be apprxiately {{question_length}} words long

@@ -1,0 +1,50 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Generate Synthetic Data",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "synthetic_data_generator/data_generator.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--topics_file", "synthetic_data_generator/config/topics.json",
+                "--tones_file", "synthetic_data_generator/config/tones.json",
+                "--instructions_file", "synthetic_data_generator/config/additional_instructions.json",
+                "--languages_file", "synthetic_data_generator/config/languages.json",
+                "--context_file", "synthetic_data_generator/config/context.txt",
+                "--number_of_generated_rows", "5",
+                "--output_file", "synthetic_data_generator/output/synthetic_data.json"
+            ]
+        },
+        {
+            "name": "Run Evaluator Alignment",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "custom_evals/evaluator_alignment.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--input_path", "custom_evals/data/input_data/evaluator_alignment_data.jsonl",
+            ]
+        },
+        {
+            "name": "Run eval",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "run_evals/evaluate.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--evaluator", "marketing_eval",
+                "--output_path", "run_evals/data/output/eval_result_marketing.csv",
+                "--input_path", "run_evals/data/input/qa_answered_by_assistant.jsonl",
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+[
+    {"tone": "", "frequency score": 20},
+    {"tone": "Angry", "frequency score": 5},
+    {"tone": "Sad", "frequency score": 5},
+    {"tone": "Worried", "frequency score": 5},
+    {"tone": "Anxious", "frequency score": 5}
+]

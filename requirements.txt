@@ -1,0 +1,9 @@
+prompty[azure]
+python-dotenv
+numpy
+pandas
+azure-ai-evaluation
+azure-identity
+scikit-learn
+matplotlib
+seaborn
