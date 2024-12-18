@@ -117,8 +117,8 @@ Congratulations! You are now ready to dive into the modules and continue the set
 
 ### Modules
 
-[Synthetic Data Generator](AI-Assistant-Alignment-and-Evaluation\synthetic_data_generator\README.md)
+[Synthetic Data Generator](synthetic_data_generator/README.md)
 
-[Custom Evaluator](custom_evals\README.md)
+[Custom Evaluator](custom_evals/README.md)
 
-[Run Evaluation](run_evals\README.md)
+[Run Evaluation](run_evals/README.md)
