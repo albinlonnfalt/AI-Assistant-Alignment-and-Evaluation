@@ -24,7 +24,7 @@ Cohen's Kappa is a statistical measure used to evaluate the level of agreement b
 
 ## Executing Alignment
 
-This guide explains how to execute the script for aligning the evaluator. Instructions for running the evaluator itself can be found in the [Run Evals](run_evals\README.md) module.
+This guide explains how to execute the script for aligning the evaluator. Instructions for running the evaluator itself can be found in the [Run Evals](run_evals/README.md) module.
 
 ### Adding Data
 
