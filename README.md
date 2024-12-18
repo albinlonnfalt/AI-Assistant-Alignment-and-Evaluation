@@ -1,7 +1,7 @@
 
 # AI Assistant Alignment and Evaluation:
 
-Welcome to the AI Assistant Evaluator project! This repository is designed to accelerate your evaluation and alignment efforts for AI Assistants. It includes best practices and a user-friendly framework that you can tailor to your specific needs. **This methodology has been successfully used to align AI Assistants deployed to millions of consumers.** Please note that the content in this repository is entirely fictional.
+Welcome to the AI Assistant Alignment and Evaluation project! This repository is designed to accelerate your evaluation and alignment efforts for AI Assistants. It includes best practices and a user-friendly framework that you can tailor to your specific needs. **This methodology has been successfully used to align AI Assistants deployed to millions of consumers.** Please note that the content in this repository is entirely fictional.
 
 If you have any questions, encounter issues, or need assistance with setting up the repository, please don't hesitate to contact us.
 
@@ -45,7 +45,7 @@ A common pattern we have observed is that the sampled questions used for alignme
 
 ![Architecture Diagram](media/img/sampling_from_distribution.png)
 
-The behavior of AI systems for questions that fall outside the sampling distribution used for alignment and evaluation often results in very unpredictable outcomes. Therefore, it is crucial to obtain samples from as large a portion of the distribution as possible. Synthetic data is an excellent tool for achieving a dataset that covers a broader range of possible questions, as it can be scaled indefinitely and eliminates human biases.
+The behavior of AI systems for questions that fall outside the sampling distribution used for alignment and evaluation often results in unpredictable outcomes. Therefore, it is crucial to obtain samples from as large a portion of the distribution as possible. Synthetic data is an excellent tool for achieving a dataset that covers a broader range of possible questions, as it can be scaled indefinitely and eliminates human biases.
 
 ## Importance of Automatic Evaluators
 
@@ -60,11 +60,9 @@ To effectively cover a significant dataset, it is important to scale the evaluat
 ## Get Started
 
 
-To get started with the AI Assistant Evaluator project, follow these steps:
+To get started with the AI Assistant Alignment and Evaluation project, follow these steps:
 
 ### Prerequisites
-
-Ensure you have the following installed on your system:
 
 - [Git](https://git-scm.com/)
 - Azure OpenAI with a deployed chat model called gpt-4o   
@@ -85,13 +83,13 @@ cd AI-Assistant-Alignment-and-Evaluation
 Create a new conda environment with python 3.11:
 
 ```sh
-conda create --name ai-assistant-evaluator python=3.11
+conda create --name ai-assistant-alignment-and-evaluation python=3.11
 ```
 
 Activate the newly created environment:
 
 ```sh
-conda activate ai-assistant-evaluator
+conda activate ai-assistant-alignment-and-evaluation
 ```
 
 ### Step 3: Install Requirements
