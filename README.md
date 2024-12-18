@@ -99,7 +99,7 @@ Install the required Python packages using the `requirements.txt` file:
 ```sh
 pip install -r requirements.txt
 ```
-### Step 4: Select Interperater for Python
+### Step 4: Select Interpreter for Python
 
 Press `Ctrl + Shift + P`, type `Python: Select Interpreter`, and choose the environment you just created.
 
