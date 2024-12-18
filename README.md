@@ -78,8 +78,8 @@ Ensure you have the following installed on your system:
 Open your terminal and clone the repository using the following command:
 
 ```sh
-git clone https://github.com/yourusername/ai-assistant-evaluator.git
-cd ai-assistant-evaluator
+git clone https://github.com/albinlonnfalt/AI-Assistant-Alignment-and-Evaluation.git
+cd AI-Assistant-Alignment-and-Evaluation
 ```
 
 ### Step 2: Create a Conda Environment
