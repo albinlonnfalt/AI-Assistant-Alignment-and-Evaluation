@@ -105,7 +105,7 @@ pip install -r requirements.txt
 ```
 ### Step 4: Select Interperater for Python
 
-Press ctrl + shirt + p and search for 'Python: Select Interpreter'. Choose the env you just created
+Press `Ctrl + Shift + P`, type `Python: Select Interpreter`, and choose the environment you just created.
 
 ### Step 5: Set Up .env File
 
