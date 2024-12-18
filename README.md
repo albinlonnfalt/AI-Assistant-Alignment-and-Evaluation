@@ -89,7 +89,7 @@ conda create --name ai-assistant-alignment-and-evaluation python=3.11
 Activate the newly created environment:
 
 ```sh
-conda activate ai-assistant-evaluator
+conda activate ai-assistant-alignment-and-evaluation
 ```
 
 ### Step 3: Install Requirements
