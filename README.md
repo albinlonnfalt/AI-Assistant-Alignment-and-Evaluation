@@ -1,9 +1,9 @@
 
-# AI Assistant Evaluator:
+# AI Assistant Alignment and Evaluation:
 
-Welcome to the AI Assistant Evaluator project! This repository is designed to accelerate your evaluation and alignment efforts for AI Assistants. It includes best practices and a user-friendly framework that you can tailor to your specific needs. **Our methodology has been successfully used to align AI Assistants deployed to millions of consumers.** Please note that the content in this repository is entirely fictional.
+Welcome to the AI Assistant Evaluator project! This repository is designed to accelerate your evaluation and alignment efforts for AI Assistants. It includes best practices and a user-friendly framework that you can tailor to your specific needs. **This methodology has been successfully used to align AI Assistants deployed to millions of consumers.** Please note that the content in this repository is entirely fictional.
 
-If you have any questions, encounter issues, or need assistance with setting up the repository, please don't hesitate to contact us at albinlnnflt@microsoft.com.
+If you have any questions, encounter issues, or need assistance with setting up the repository, please don't hesitate to contact us.
 
 ## Table of Contents
 
@@ -24,8 +24,6 @@ The prefilled content is entirely fictional and represents a fictional Swedish b
 ## Solution Overview
 
 The methodology is built on two crucial pillars: **synthetic data generation** and **automatic evaluators**. Our field experience indicates that both synthetic data and automatic evaluators are often overlooked and underutilized. This is primarily due to a lack of understanding of the underlying mathematical properties of generative AI models and the challenges associated with effectively implementing these components. This repository aims to accelerate and empower developers to harness the potential of these components by compiling key learnings from our work with companies that have launched AI solutions to millions of users.
-
-
 
 ![Architecture Diagram](media/img/solution_overview.png)
 
