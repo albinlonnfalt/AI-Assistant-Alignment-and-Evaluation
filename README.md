@@ -87,7 +87,7 @@ cd AI-Assistant-Alignment-and-Evaluation
 Create a new conda environment using the `environment.yml` file provided in the repository:
 
 ```sh
-conda env create -f environment.yml
+conda create --name myenv ai-assistant-alignment-and-evaluation python=3.11
 ```
 
 Activate the newly created environment:
