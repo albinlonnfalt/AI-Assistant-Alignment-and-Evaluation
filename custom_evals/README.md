@@ -36,6 +36,8 @@ Cohen's Kappa is a statistical measure used to evaluate the level of agreement b
 
 The script generates a confusion matrix, which is a valuable tool for evaluating the performance of the evaluator. It helps in identifying areas for improvement and understanding performance across different classes, especially in imbalanced datasets. The confusion matrix also allows you to see the trade-offs between precision, recall, and accuracy, offering a comprehensive view of the evaluator's performance.
 
+![Evaluator Alignment](../media/img/alignment_evaluator_example.png)
+
 ## Executing Alignment
 
 This guide explains how to execute the script for aligning the evaluator. Instructions for running the evaluator itself can be found in the [Run Evals](../run_evals/README.md) module.
@@ -45,5 +47,5 @@ This guide explains how to execute the script for aligning the evaluator. Instru
 Add annotated data to the `custom_evals/data/input_data` folder. The default column names required are `question`, `answer`, `context`, and `human_label`. Feel free to use different column names, but note that this will require some code changes.
 
 ### Run
-It is recommended to run the script from the debugger. A launch file has been provided with default launch configurations named 'Generate Synthetic Data'.
+It is recommended to run the script from the debugger. A launch file has been provided with default launch configurations named 'Run Evaluator Alignment'.
 
