@@ -3,6 +3,16 @@
 
 This example demonstrates a custom evaluator that leverages model completion. You can also create other types of evaluators, such as those that check if a string contains a specific word. The advantage of using model completion lies in its high flexibility and low development cost.
 
+## Importance of Automatic Evaluators
+
+### Iterative Alignment 
+
+To rapidly iterate on prompts, configurations, or fine-tuned models, it is crucial to have a swift evaluation method to determine if the system has improved. Automatic evaluators can provide near-instant feedback, eliminating the need to rely on human domain experts for daily development tasks. 
+
+### Scale the Evaluation
+
+To effectively cover a significant dataset, it is important to scale the evaluations. Scaling evaluations to a sufficient number of data points often requires automated evaluators that can either operate independently or assist in reducing the number of data points that need to be reviewed by a human.
+
 ## Evaluator Alignment
 
 To ensure the reliability of automatic evaluations, it is crucial to align the evaluator with human-annotated data. This alignment guarantees that the evaluation process is trustworthy. In the `evaluator_alignment.py` file, key performance indicators (KPIs) such as Cohen's kappa are calculated, and confusion matrices are displayed. These metrics help in developing an evaluator that closely matches human assessments.
@@ -21,6 +31,10 @@ Cohen's Kappa is a statistical measure used to evaluate the level of agreement b
 - κ = 0.40−0.59: Moderate agreement
 - κ = 0.60−0.79: Substantial agreement
 - κ ≥ 0.80: Almost perfect agreement
+
+### Confusion Matrix
+
+The script generates a confusion matrix, which is a valuable tool for evaluating the performance of the evaluator. It helps in identifying areas for improvement and understanding performance across different classes, especially in imbalanced datasets. The confusion matrix also allows you to see the trade-offs between precision, recall, and accuracy, offering a comprehensive view of the evaluator's performance.
 
 ## Executing Alignment
 
