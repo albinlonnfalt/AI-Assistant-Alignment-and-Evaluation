@@ -44,9 +44,11 @@ Having a sufficient quantity of data from a representative distribution is cruci
 ### Out of Distribution Behaviour
 A common pattern we have observed is that the sampled questions used for alignment and evaluation do not represent the entire distribution of questions that will be asked to the AI assistant. Often, the dataset exclusively contains the most common topics, lengths, and phrasings. The image below illustrates the sampling cut-off from the tails of the distribution. (Please note that the image is purely illustrative and not representative of a real distribution.)
 
-![Architecture Diagram](media/img/sampling_from_distribution.png)
+![Sample distribution](media/img/sampling_from_distribution.png)
 
 The behavior of AI systems for questions that fall outside the sampling distribution used for alignment and evaluation often results in unpredictable outcomes. Therefore, it is crucial to obtain samples from as large a portion of the distribution as possible. Synthetic data is an excellent tool for achieving a dataset that covers a broader range of possible questions, as it can be scaled indefinitely and eliminates human biases.
+
+![Bad and godd dataset](media/img/bad_vs_good_data_sampling.png)
 
 ## Importance of Automatic Evaluators
 
