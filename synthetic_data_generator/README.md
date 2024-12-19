@@ -73,6 +73,10 @@ The distribution is a shifted log-normal distribution. Here is an explanation of
 - **sigma**: The standard deviation of the underlying normal distribution.
 - **shift**: A value added to the generated length to ensure a minimum length.
 
+Below is a plot of the distrubution with mean = 2.5, sigma = 0.75 and shift = 2
+
+![Lenght Distribution Example](../media/img/lenght_dist.png)
+
 ### Execution
 
 It is recommended to run the script from the debugger. A launch file has been provided with default launch configurations named 'Generate Synthetic Data'.

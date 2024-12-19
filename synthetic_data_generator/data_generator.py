@@ -19,7 +19,7 @@ from azure.identity import DefaultAzureCredential
 config_path = os.path.join(os.path.dirname(__file__), 'config/response_lengh_distrubution.json')
 with open(config_path, 'r') as file:
     config = json.load(file)
-mu = config['mu']
+mean = config['mean']
 sigma = config['sigma']
 shift = config['shift']
 
@@ -78,7 +78,7 @@ def draw_item(items, key):
 # Generate the question lenght by drawing from a distrubution
 def generate_response_length():
     # Generate a log-normally distributed number and shift
-    length = np.random.lognormal(mean=mu, sigma=sigma) + shift
+    length = np.random.lognormal(mean=mean, sigma=sigma) + shift
     # Ensure the number is at least the shift
     return int(max(shift, length))
 
