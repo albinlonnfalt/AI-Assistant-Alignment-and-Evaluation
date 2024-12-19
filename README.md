@@ -27,10 +27,11 @@ The methodology is built on two crucial pillars: **synthetic data generation** a
 
 ![Architecture Diagram](media/img/solution_overview.png)
 
-## Key Technology
+## Key Technologies
 
-- **Azure OpenAI**: Utilizes models for chat, embeddings, and evaluation. (Can be changed to OpenAI or Azure MaaS)
-- **Prompty**: Facilitates rapid ideation and prompt management.
+- **Azure OpenAI**: Leverages advanced models for chat, embeddings, and evaluation. (Can be substituted with OpenAI or Azure MaaS)
+- **Azure AI Evaluation SDK**: Provides a robust framework for evaluation orchestration, capable of running both locally and at scale in the cloud.
+- **Prompty**: Enhances rapid ideation and efficient prompt management.
 
 ## Importance of Synthetic Data in AI Alignment
 
@@ -58,7 +59,6 @@ To rapidly iterate on prompts, configurations, or fine-tuned models, it is cruci
 To effectively cover a significant dataset, it is important to scale the evaluations. Scaling evaluations to a sufficient number of data points often requires automated evaluators that can either operate independently or assist in reducing the number of data points that need to be reviewed by a human.
 
 ## Get Started
-
 
 To get started with the AI Assistant Alignment and Evaluation project, follow these steps:
 
