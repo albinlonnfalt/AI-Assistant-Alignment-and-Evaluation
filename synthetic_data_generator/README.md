@@ -20,18 +20,19 @@
 
 ## Solution Overview
 
-The core concept of the Synthetic Data Generator is to allow users to specify configurations such as topics, tones, and lengths of synthetic user inputs. These configurations are independently selected through a statistical draw and then inserted into the prompt. A high temperature setting is used to introduce variety in the generated data.
+The Synthetic Data Generator allows users to specify configurations such as topics, tones, and lengths of synthetic user inputs. These configurations are independently selected through a statistical draw and then inserted into the prompt. A high temperature setting is used to introduce variety in the generated data.
 
 ## Importance of Synthetic Data in AI Alignment
 
-Our field experience shows that synthetic data plays a crucial role in successfully aligning AI systems. Despite its importance, synthetic data is rarely used for AI evaluation and alignment. This underutilization is often due to a lack of understanding of its benefits and the challenges associated with its implementation.
+Synthetic data plays a crucial role in successfully aligning AI systems. Despite its importance, synthetic data is rarely used for AI evaluation and alignment due to a lack of understanding of its benefits and the challenges associated with its implementation.
 
 ### Significance of Sufficient Data Quantity
 
 Having a sufficient quantity of data from a representative distribution is crucial for the effective alignment and evaluation of AI systems. Current AI models are unpredictable and sensitive to small changes in prompts. To align and evaluate reliably, it is important to sample extensively from the distribution of possible questions to make statistically significant conclusions. Additionally, many AI systems may have an asymmetric risk profile, meaning that misalignment can lead to significant consequences. For such solutions, it is crucial to scale the annotated data to achieve statistically significant results with an acceptable risk profile.
 
-### Out of Distribution Behaviour
-A common pattern we have observed is that the sampled questions used for alignment and evaluation do not represent the entire distribution of questions that will be asked to the AI assistant. Often, the dataset exclusively contains the most common topics, lengths, and phrasings. The image below illustrates the sampling cut-off from the tails of the distribution. (Please note that the image is purely illustrative and not representative of a real distribution.)
+### Out of Distribution Behavior
+
+A common pattern observed is that the sampled questions used for alignment and evaluation do not represent the entire distribution of questions that will be asked to the AI assistant. Often, the dataset exclusively contains the most common topics, lengths, and phrasings. The image below illustrates the sampling cut-off from the tails of the distribution. (Please note that the image is purely illustrative and not representative of a real distribution.)
 
 ![Architecture Diagram](../media/img/sampling_from_distribution.png)
 
@@ -78,4 +79,4 @@ It is recommended to run the script from the debugger. A launch file has been pr
 
 ## Analyzing Generated Data
 
-In the notebook `analyse_generated_data.ipynb`, you can analyze the generated data to find overrepresented tokens, and examine the distribution and variety in the data. Detailed descriptions of the methods are provided in the notebook.
+In the notebook `analyse_generated_data.ipynb`, you can analyze the generated data to find overrepresented tokens, and examine the distribution and variety in the data. Detailed descriptions of the methods are provided in the notebook. **Analyzing the synthetic data and iteratively modifying the configurations to improve the quality of the synthetic data is crucial for good alignment and evaluation results.**
