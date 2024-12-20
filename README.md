@@ -69,7 +69,7 @@ To get started with the AI Assistant Alignment and Evaluation project, follow th
 ### Prerequisites
 
 - [Git](https://git-scm.com/)
-- Azure OpenAI with a deployed chat and embedding model
+- Azure OpenAI with deployed chat and embedding model
 - [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (optional)
 - Prompty extention to vscode (optional)
 
