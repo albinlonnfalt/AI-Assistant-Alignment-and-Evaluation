@@ -73,6 +73,12 @@ To get started with the AI Assistant Alignment and Evaluation project, follow th
 - [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (optional)
 - Prompty extention to vscode (optional)
 
+### Step 1: Fork the repository
+
+Log in to GitHub with your GitHub account. Fork this repo by selecting the Fork menu in the GitHub top right corner.
+
+![Fork](media/img/fork.png)
+
 ### Step 1: Clone the Repository
 
 Open your terminal and clone the repository using the following command:
