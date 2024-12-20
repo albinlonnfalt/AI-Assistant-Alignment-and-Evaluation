@@ -7,3 +7,5 @@ azure-identity
 scikit-learn
 matplotlib
 seaborn
+fastapi
+uvicorn

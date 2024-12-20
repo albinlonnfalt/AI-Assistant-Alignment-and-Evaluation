@@ -24,7 +24,7 @@ sigma = config['sigma']
 shift = config['shift']
 
 
-def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config, output_file):
+def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config):
     
     result = prompty.execute(
         "data_generator.prompty", 
@@ -39,7 +39,7 @@ def generate_question(topic, tone, language, additional_instructions, context, q
         configuration=model_config
     )
 
-    write_json_file(output_file, result)
+    return result
 
 def write_json_file(file_path, data):
     if os.path.exists(file_path):
@@ -83,36 +83,13 @@ def generate_response_length():
     return int(max(shift, length))
 
 
-def generate_data(args):
-
-    # ------ You need environment variables ------
-    model_config = {
-        #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
-        #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
-        "api_key": os.environ["AZURE_OPENAI_KEY"]
-    }
-
-    # Read the content of the context file
-    with open(args.context_file, 'r') as file:
-        context_string = file.read()
-
-    # --Topics--
-    topics = load_json_file(args.topics_file)
+def generate_data(topics, tones, additional_instructions, languages, context_string, number_of_rows):
     topics = normalize_scores(topics)
-
-    # --Tones--
-    tones = load_json_file(args.tones_file)
     tones = normalize_scores(tones)
-    
-    # - Additional instructions -
-    additional_instructions = load_json_file(args.instructions_file)
     additional_instructions = normalize_scores(additional_instructions)
-
-    # --Languages--
-    languages = load_json_file(args.languages_file)
     languages = normalize_scores(languages)
-
-    for i in range(args.number_of_generated_rows):
+    results = []
+    for i in range(number_of_rows):
         topic = draw_item(topics, "topic")
         tone = draw_item(tones, "tone")
         language = draw_item(languages, "language")
@@ -121,10 +98,22 @@ def generate_data(args):
     
         print(question_length)
 
-        generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config, args.output_file)
+        question = generate_question(
+            topic,
+            tone,
+            language,
+            additional_instruction,
+            context_string,
+            question_length,
+            model_config={
+                "api_key": os.environ["AZURE_OPENAI_KEY"]
+            }
+        )
+        results.append(question)
 
         # Avoid rate limiting
         time.sleep(1)
+    return results
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic data.')
@@ -138,4 +127,21 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    generate_data(args)
+    topics = load_json_file(args.topics_file)
+    tones = load_json_file(args.tones_file)
+    additional_instructions = load_json_file(args.instructions_file)
+    languages = load_json_file(args.languages_file)
+    with open(args.context_file, 'r') as file:
+        context_string = file.read()
+
+
+
+    results = generate_data(
+        topics,
+        tones,
+        additional_instructions,
+        languages,
+        context_string,
+        args.number_of_generated_rows
+    )
+    write_json_file(args.output_file, results)
