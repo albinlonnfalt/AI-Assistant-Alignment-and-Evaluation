@@ -8,10 +8,8 @@ model:
     azure_deployment: ${env:AZURE_OPENAI_CHATMODEL}
     api_version: ${env:AZURE_OPENAI_API_VERSION}
   parameters:
-    max_tokens: 300
+    max_tokens: 2000
     temperature: 1
-    response_format: 
-     type: json_object
 inputs:
   prompt:
     type: string
@@ -32,7 +30,9 @@ system:
 You are an helpful assistant that improve prompts. You will be provided with a prompt, and a list of exampels where the current prompt did correct and where it did not evaluate correct.
 Please make small changes to the prompt that will improve the AUC score.
 
-Make sure to answer with the entier prompt
+Make sure to answer with the entier prompt. Answer with the prompt, nothing else
+
+You are only allowed to change the guidlines in the prompt.
 
 # Important notes:
 You are not allowed to change th output format of the prompt prompt you modify. It should always be in the following format:
@@ -52,15 +52,5 @@ You are not allowed to change th output format of the prompt prompt you modify. 
 
 # Example Results:
 {{example_results}}
-
-# Response format
-Alway answer following this json format:
-
-{
-
-  "chain of thought": "...",
-  "new prompt": "You are an AI helpful AI assistnat. You job is to evaluate the chatbot's responses and determine if they follow the guidelines provided by the bank."
-  
-}
 
 Provide the new improved prompt as 'new prompt' key in the json object. The 'chain of thought' key should contain the reasoning behind the changes you made to the prompt.

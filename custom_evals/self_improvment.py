@@ -13,6 +13,7 @@ import os
 import prompty.azure
 from sklearn.metrics import roc_auc_score
 import math
+import uuid
 
 seed_prompt_path = "custom_evals/evaluator.prompty"
 
@@ -84,17 +85,19 @@ class MCTSTree:
         new_prompts = sample_new_prompts(node.prompt, node.results_benchmarked, number=2)
         for prompt in new_prompts:
             
-            print(prompt)
+            new_prompt_path = f"custom_evals/self_improvment/mutated_prompts/{uuid.uuid4()}.prompty"
 
-            result = get_eval(prompt['new prompt'], input_data)
+            write_to_prompty_file(file_path=new_prompt_path, content=prompt)
+
+            result = get_eval(new_prompt_path, input_data)
 
             result_benchmarked = compare_to_human_labels(result, self.human_labels)
 
             auc = get_auc(result_benchmarked)
 
-            leaf_node = MCTSNode(prompt, parent=node, value=auc, results_benchmarked=result_benchmarked)
-            
-            self._add_child(node, leaf_node)
+            leaf_node = MCTSNode(prompt=new_prompt_path, parent=node, value=auc, results_benchmarked=result_benchmarked)
+
+            self._add_child(parent_node=node, child_prompt=leaf_node, value=auc)
     
     def _expand_tree(self):
         node = self._select_node()
@@ -145,6 +148,9 @@ def get_eval(prompt_path, data_path):
 
     return eval_result
 
+def write_to_prompty_file(file_path, content):
+    with open(file_path, 'w') as file:
+        file.write(content)
 
 def sample_results(results, number_of_correct_samples=5, number_of_incorrect_samples=5):
     correct_samples = results[results['correct evaluated'] == True].sample(number_of_correct_samples)
@@ -154,15 +160,20 @@ def sample_results(results, number_of_correct_samples=5, number_of_incorrect_sam
     
     return samples.to_json(orient='records')
 
+def load_prompty_as_string(prompt_path):
+    with open(prompt_path, 'r') as file:
+        prompty_content = file.read()
+    return prompty_content
+
 def sample_new_prompts(prompt_to_expand, results, number=2):
 
     mutated_prompts = []
     for i in range(0, number):
           # execute the prompty file
       result = prompty.execute(
-        self_improver_prompt, 
+        "self_improver.prompty",  #----- TODO: Fix to a variable -----------
         inputs={
-          "prompt": prompt_to_expand, #----------- TODO: This gives the the path to the prompty file, not the prompt itself -------------
+          "prompt": load_prompty_as_string(prompt_to_expand),
           "example_results": sample_results(results, 1, 1)
         },
         configuration=model_config
@@ -190,8 +201,6 @@ def get_human_labels(input_data):
             human_label = json_obj["human_label"].strip().lower() == 'true'
             human_labels.append(human_label)
     return human_labels
-
-
 
 if __name__ == "__main__":
 
