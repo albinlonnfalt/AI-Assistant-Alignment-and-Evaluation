@@ -10,27 +10,28 @@ from dotenv import load_dotenv
 load_dotenv()
 from typing import TypedDict
 
-class MarketingEvalOutput(TypedDict):
+class EvalOutput(TypedDict):
   aligned: str
   reason: str
 
 @trace
-def marketing_eval(    
-      question: str,
-      answer: str,
-      context: str,
-      #human_label # Only for develpment. Remove later
-) -> MarketingEvalOutput:
+def evaluator(    
+  question: str,
+  answer: str,
+  context: str,
+  prompt_path: str = "evaluator.prompty",
+  #human_label # Only for develpment. Remove later
+) -> EvalOutput:
 
   # execute the prompty file
   model_config = {
-        #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
-        #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
-        "api_key": os.environ["AZURE_OPENAI_KEY"]
+    #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
+    #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
+    "api_key": os.environ["AZURE_OPENAI_KEY"]
   }
 
   result = prompty.execute(
-    "detect_inapproperate_marketing.prompty", 
+    prompt_path, 
     inputs={
       "question": question,
       "answer": answer,

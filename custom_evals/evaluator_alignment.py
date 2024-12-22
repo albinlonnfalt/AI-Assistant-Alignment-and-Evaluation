@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from sklearn.metrics import cohen_kappa_score
-from custom_evals.marketing_eval import marketing_eval
+from custom_evals.evaluator import evaluator
 from azure.ai.evaluation import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -28,7 +28,7 @@ def evaluate_alignment(args):
         data=input_data_path,
         # target=get_response,
         evaluators={
-            "eval": marketing_eval,
+            "eval": evaluator,
         },
         evaluator_config={
             "default": {
