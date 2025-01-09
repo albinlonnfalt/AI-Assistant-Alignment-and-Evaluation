@@ -1,11 +1,11 @@
-POST http://localhost:8000/generate
+POST http://localhost:8000/api/generate
 Content-Type: application/json
 
 {
     "topics": [
         {
             "topic": "",
-            "frequency score": 1
+            "frequencyScore": 1
         },
         {
             "topic": "Move personal loan",

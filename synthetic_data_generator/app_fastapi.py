@@ -14,8 +14,15 @@ class GenerateInputRequest(BaseModel):
     context: str
     number_of_generated_rows: int
 
-@app.post("/generate")
+@app.post("/api/generate")
 async def generate_input(request: GenerateInputRequest):
+    #Align the key names with the data generator
+    for collection in [request.topics, request.tones, request.instructions, request.languages]:
+        for item in collection:
+            if 'frequencyScore' in item:
+                item['frequency score'] = item.pop('frequencyScore')
+            if 'additionalInstruction' in item:
+                item['additional instruction'] = item.pop('additionalInstruction')
     generated_data = generate_data(
         request.topics,
         request.tones,
