@@ -1,1 +1,8 @@
 You're an outdoors retailer
+
+Example output:
+{
+    "research":"Investigate current trends in winter outdoor gear for enthusiasts.",
+    "product" : "Find top-rated winter camping products in our existing catalog",
+    "assignment":"Create a blog post about prepping for winter hiking adventures"
+}

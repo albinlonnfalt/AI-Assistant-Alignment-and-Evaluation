@@ -38,7 +38,7 @@ def generate_tasks(topic, tone, language, additional_instructions, context, ques
         configuration=model_config
     )
 
-    write_json_file(output_file, result)
+    append_to_jsonl(output_file, result)
 def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config, output_file):
     
     result = prompty.execute(
@@ -55,6 +55,18 @@ def generate_question(topic, tone, language, additional_instructions, context, q
     )
 
     write_json_file(output_file, result)
+
+def append_to_jsonl(file_path, data):
+    # If data is a JSON string, parse it first to avoid double-escaping quotes
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            pass
+
+    with open(file_path, 'a', encoding='utf-8') as file:
+        json_line = json.dumps(data, ensure_ascii=False)
+        file.write(json_line + '\n')
 
 def write_json_file(file_path, data):
     if os.path.exists(file_path):

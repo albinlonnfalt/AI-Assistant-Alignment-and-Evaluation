@@ -39,7 +39,7 @@
                 "--agent_config_file", "synthetic_data_generator/config/agent_eval_example/agent_definitions.json",
                 "--context_file", "synthetic_data_generator/config/agent_eval_example/context.txt",
                 "--number_of_generated_rows", "5",
-                "--output_file", "synthetic_data_generator/output/synthetic_agent_data.json"
+                "--output_file", "synthetic_data_generator/output/synthetic_agent_data.jsonl"
             ]
         },
         {
