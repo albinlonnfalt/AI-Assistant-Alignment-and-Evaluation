@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Current File",
             "type": "debugpy",
@@ -22,6 +23,23 @@
                 "--context_file", "synthetic_data_generator/config/context.txt",
                 "--number_of_generated_rows", "5",
                 "--output_file", "synthetic_data_generator/output/synthetic_data.json"
+            ]
+        },
+        {
+            "name": "Generate Synthetic Agent Data",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "synthetic_data_generator/data_generator.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--topics_file", "synthetic_data_generator/config/agent_eval_example/topics.json",
+                "--tones_file", "synthetic_data_generator/config/agent_eval_example/tones.json",
+                "--instructions_file", "synthetic_data_generator/config/agent_eval_example/additional_instructions.json",
+                "--languages_file", "synthetic_data_generator/config/agent_eval_example/languages.json",
+                "--agent_config_file", "synthetic_data_generator/config/agent_eval_example/agent_definitions.json",
+                "--context_file", "synthetic_data_generator/config/agent_eval_example/context.txt",
+                "--number_of_generated_rows", "5",
+                "--output_file", "synthetic_data_generator/output/synthetic_agent_data.json"
             ]
         },
         {

@@ -23,7 +23,22 @@ mean = config['mean']
 sigma = config['sigma']
 shift = config['shift']
 
+def generate_tasks(topic, tone, language, additional_instructions, context, question_length, agent_configuration, model_config, output_file):
+    result = prompty.execute(
+        "agent_generator.prompty", 
+        inputs={
+            "topic": topic,
+            "tone": tone,
+            "language": language,
+            "additional_instructions": additional_instructions,
+            "context": context,
+            "agent_configuration": agent_configuration,
+            "question_length": question_length
+        },
+        configuration=model_config
+    )
 
+    write_json_file(output_file, result)
 def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config, output_file):
     
     result = prompty.execute(
@@ -112,6 +127,12 @@ def generate_data(args):
     languages = load_json_file(args.languages_file)
     languages = normalize_scores(languages)
 
+    #-- Agent Configuration --
+    if(args.agent_config_file):
+        agent_config = load_json_file(args.agent_config_file)
+    else:
+        agent_config = None
+
     for i in range(args.number_of_generated_rows):
         topic = draw_item(topics, "topic")
         tone = draw_item(tones, "tone")
@@ -119,9 +140,11 @@ def generate_data(args):
         additional_instruction = draw_item(additional_instructions, "additional instruction")
         question_length = generate_response_length()
     
-        print(question_length)
-
-        generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config, args.output_file)
+        # print(question_length)
+        if(agent_config != None):
+            generate_tasks(topic, tone, language, additional_instruction, context_string, question_length, agent_config, model_config, args.output_file)
+        else:
+            generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config, args.output_file)
 
         # Avoid rate limiting
         time.sleep(1)
@@ -135,6 +158,7 @@ if __name__ == '__main__':
     parser.add_argument('--context_file', type=str, required=True, help='Path to the context text file')
     parser.add_argument('--number_of_generated_rows', type=int, required=True, help='Number of rows to generate')
     parser.add_argument('--output_file', type=str, required=True, help='Path to the output JSON file')
+    parser.add_argument('--agent_config_file', type=str, required=False, help='Path to the agent configuration JSON file')
 
     args = parser.parse_args()
 
