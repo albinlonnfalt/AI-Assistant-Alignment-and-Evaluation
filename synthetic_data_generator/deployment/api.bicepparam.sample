@@ -1,0 +1,10 @@
+using './api.bicep'
+
+param location = 'swedencentral'
+param name = 'synthdata'
+param containerImage = ''
+param azureOpenAIKey = ''
+param azureOpenAIChatModel = 'gpt-4o'
+param azureOpenAIApiVersion = '2024-05-01-preview'
+param azureOpenAIEndpoint = ''
+

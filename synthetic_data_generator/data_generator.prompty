@@ -7,6 +7,8 @@ model:
     type: azure_openai
     azure_deployment: ${env:AZURE_OPENAI_CHATMODEL}
     api_version: ${env:AZURE_OPENAI_API_VERSION}
+    azure_endpoint: ${env:AZURE_OPENAI_ENDPOINT}
+
   parameters:
     max_tokens: 128
     temperature: 0.9
@@ -32,7 +34,7 @@ sample:
     additional_instructions: "Please make sure the questions are relevant to the topic and are in a friendly tone."
 ---
 system:
-You are an AI assistant. You task is to generate potential questions to a customer service chat. Be very creative and try to think of all possible questions that a customer might ask. 
+You are an AI assistant. You task is to generate potential questions to a customer service chat. Be very creative anxd try to think of all possible questions that a customer might ask. 
 
 Answer only with the question. Do not include anything else in your response.
 

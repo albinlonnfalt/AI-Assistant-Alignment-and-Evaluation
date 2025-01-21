@@ -2,9 +2,9 @@ prompty[azure]
 python-dotenv
 numpy
 pandas
-azure-ai-evaluation
+#azure-ai-evaluation
 azure-identity
-scikit-learn
+#scikit-learn
 matplotlib
 seaborn
 fastapi

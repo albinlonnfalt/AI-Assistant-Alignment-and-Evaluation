@@ -68,6 +68,18 @@ def append_to_jsonl(file_path, data):
         json_line = json.dumps(data, ensure_ascii=False)
         file.write(json_line + '\n')
 
+def append_to_jsonl(file_path, data):
+    # If data is a JSON string, parse it first to avoid double-escaping quotes
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            pass
+
+    with open(file_path, 'a', encoding='utf-8') as file:
+        json_line = json.dumps(data, ensure_ascii=False)
+        file.write(json_line + '\n')
+
 def write_json_file(file_path, data):
     if os.path.exists(file_path):
         with open(file_path, 'r') as file:
@@ -110,33 +122,10 @@ def generate_response_length():
     return int(max(shift, length))
 
 
-def generate_data(args):
-
-    # ------ You need environment variables ------
-    model_config = {
-        #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
-        #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
-        "api_key": os.environ["AZURE_OPENAI_KEY"]
-    }
-
-    # Read the content of the context file
-    with open(args.context_file, 'r') as file:
-        context_string = file.read()
-
-    # --Topics--
-    topics = load_json_file(args.topics_file)
+def generate_data(topics, tones, additional_instructions, languages, context_string, number_of_rows):
     topics = normalize_scores(topics)
-
-    # --Tones--
-    tones = load_json_file(args.tones_file)
     tones = normalize_scores(tones)
-    
-    # - Additional instructions -
-    additional_instructions = load_json_file(args.instructions_file)
     additional_instructions = normalize_scores(additional_instructions)
-
-    # --Languages--
-    languages = load_json_file(args.languages_file)
     languages = normalize_scores(languages)
 
     #-- Agent Configuration --
@@ -160,6 +149,7 @@ def generate_data(args):
 
         # Avoid rate limiting
         time.sleep(1)
+    return results
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic data.')
@@ -174,4 +164,21 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    generate_data(args)
+    topics = load_json_file(args.topics_file)
+    tones = load_json_file(args.tones_file)
+    additional_instructions = load_json_file(args.instructions_file)
+    languages = load_json_file(args.languages_file)
+    with open(args.context_file, 'r') as file:
+        context_string = file.read()
+
+
+
+    results = generate_data(
+        topics,
+        tones,
+        additional_instructions,
+        languages,
+        context_string,
+        args.number_of_generated_rows
+    )
+    write_json_file(args.output_file, results)
