@@ -6,6 +6,10 @@ from .data_generator import generate_data
 app = FastAPI()
 load_dotenv()
 
+class AgentDefinition(BaseModel):
+    type: str
+    description: str
+
 class GenerateInputRequest(BaseModel):
     topics: list
     tones: list
@@ -13,6 +17,7 @@ class GenerateInputRequest(BaseModel):
     languages: list
     context: str
     number_of_generated_rows: int
+    agent_definitions: list[AgentDefinition] = None
 
 @app.post("/api/generate")
 async def generate_input(request: GenerateInputRequest):
@@ -29,6 +34,8 @@ async def generate_input(request: GenerateInputRequest):
         request.instructions,
         request.languages,
         request.context,
-        request.number_of_generated_rows
+        request.number_of_generated_rows,
+        request.agent_definitions
+        
     )
     return generated_data
