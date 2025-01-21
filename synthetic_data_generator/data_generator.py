@@ -23,7 +23,7 @@ mean = config['mean']
 sigma = config['sigma']
 shift = config['shift']
 
-def generate_tasks(topic, tone, language, additional_instructions, context, question_length, agent_configuration, model_config):
+def generate_tasks(topic, tone, language, additional_instructions, context, question_length, agent_definitions, model_config):
     result = prompty.execute(
         "agent_generator.prompty", 
         inputs={
@@ -32,7 +32,7 @@ def generate_tasks(topic, tone, language, additional_instructions, context, ques
             "language": language,
             "additional_instructions": additional_instructions,
             "context": context,
-            "agent_configuration": agent_configuration,
+            "agent_definitions": agent_definitions,
             "question_length": question_length
         },
         configuration=model_config
