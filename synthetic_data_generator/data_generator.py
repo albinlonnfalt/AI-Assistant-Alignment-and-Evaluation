@@ -23,7 +23,7 @@ mean = config['mean']
 sigma = config['sigma']
 shift = config['shift']
 
-def generate_tasks(topic, tone, language, additional_instructions, context, question_length, agent_configuration, model_config, output_file):
+def generate_tasks(topic, tone, language, additional_instructions, context, question_length, agent_configuration, model_config):
     result = prompty.execute(
         "agent_generator.prompty", 
         inputs={
@@ -37,9 +37,9 @@ def generate_tasks(topic, tone, language, additional_instructions, context, ques
         },
         configuration=model_config
     )
-
-    append_to_jsonl(output_file, result)
-def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config, output_file):
+    return result
+    # append_to_jsonl(output_file, result)
+def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config):
     
     result = prompty.execute(
         "data_generator.prompty", 
@@ -53,8 +53,8 @@ def generate_question(topic, tone, language, additional_instructions, context, q
         },
         configuration=model_config
     )
-
-    write_json_file(output_file, result)
+    return result
+    # write_json_file(output_file, result)
 
 def append_to_jsonl(file_path, data):
     # If data is a JSON string, parse it first to avoid double-escaping quotes
@@ -122,19 +122,21 @@ def generate_response_length():
     return int(max(shift, length))
 
 
-def generate_data(topics, tones, additional_instructions, languages, context_string, number_of_rows):
+def generate_data(topics, tones, additional_instructions, languages, context_string, number_of_rows, agent_config=None):
+    model_config = {
+        #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
+        #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
+        "api_key": os.environ["AZURE_OPENAI_KEY"]
+    }
+    
     topics = normalize_scores(topics)
     tones = normalize_scores(tones)
     additional_instructions = normalize_scores(additional_instructions)
     languages = normalize_scores(languages)
+    results = []
+ 
 
-    #-- Agent Configuration --
-    if(args.agent_config_file):
-        agent_config = load_json_file(args.agent_config_file)
-    else:
-        agent_config = None
-
-    for i in range(args.number_of_generated_rows):
+    for i in range(number_of_rows):
         topic = draw_item(topics, "topic")
         tone = draw_item(tones, "tone")
         language = draw_item(languages, "language")
@@ -143,9 +145,9 @@ def generate_data(topics, tones, additional_instructions, languages, context_str
     
         # print(question_length)
         if(agent_config != None):
-            generate_tasks(topic, tone, language, additional_instruction, context_string, question_length, agent_config, model_config, args.output_file)
+            results.append(generate_tasks(topic, tone, language, additional_instruction, context_string, question_length, agent_config, model_config))
         else:
-            generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config, args.output_file)
+            results.append(generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config))
 
         # Avoid rate limiting
         time.sleep(1)
@@ -171,7 +173,11 @@ if __name__ == '__main__':
     with open(args.context_file, 'r') as file:
         context_string = file.read()
 
-
+       #-- Agent Configuration --
+    if(args.agent_config_file):
+        agent_config = load_json_file(args.agent_config_file)
+    else:
+        agent_config = None
 
     results = generate_data(
         topics,
@@ -179,6 +185,7 @@ if __name__ == '__main__':
         additional_instructions,
         languages,
         context_string,
-        args.number_of_generated_rows
+        args.number_of_generated_rows,
+        agent_config
     )
     write_json_file(args.output_file, results)
