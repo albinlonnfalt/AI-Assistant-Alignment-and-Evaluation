@@ -1,6 +1,18 @@
 {
     "version": "0.2.0",
     "configurations": [
+
+        {
+            "name": "Python Debugger: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "synthetic_data_generator.app_fastapi:app",
+                "--reload"
+            ],
+            "jinja": true
+        },
         {
             "name": "Python: Current File",
             "type": "debugpy",
@@ -15,13 +27,37 @@
             "program": "synthetic_data_generator/data_generator.py",
             "console": "integratedTerminal",
             "args": [
-                "--topics_file", "synthetic_data_generator/config/topics.json",
-                "--tones_file", "synthetic_data_generator/config/tones.json",
-                "--instructions_file", "synthetic_data_generator/config/additional_instructions.json",
-                "--languages_file", "synthetic_data_generator/config/languages.json",
-                "--context_file", "synthetic_data_generator/config/context.txt",
+                "--topics_file",
+                "synthetic_data_generator/config/topics.json",
+                "--tones_file",
+                "synthetic_data_generator/config/tones.json",
+                "--instructions_file",
+                "synthetic_data_generator/config/additional_instructions.json",
+                "--languages_file",
+                "synthetic_data_generator/config/languages.json",
+                "--context_file",
+                "synthetic_data_generator/config/context.txt",
+                "--number_of_generated_rows",
+                "5",
+                "--output_file",
+                "synthetic_data_generator/output/synthetic_data.json"
+            ]
+        },
+        {
+            "name": "Generate Synthetic Agent Data",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "synthetic_data_generator/data_generator.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--topics_file", "synthetic_data_generator/config/agent_eval_example/topics.json",
+                "--tones_file", "synthetic_data_generator/config/agent_eval_example/tones.json",
+                "--instructions_file", "synthetic_data_generator/config/agent_eval_example/additional_instructions.json",
+                "--languages_file", "synthetic_data_generator/config/agent_eval_example/languages.json",
+                "--agent_config_file", "synthetic_data_generator/config/agent_eval_example/agent_definitions.json",
+                "--context_file", "synthetic_data_generator/config/agent_eval_example/context.txt",
                 "--number_of_generated_rows", "5",
-                "--output_file", "synthetic_data_generator/output/synthetic_data.json"
+                "--output_file", "synthetic_data_generator/output/synthetic_agent_data.jsonl"
             ]
         },
         {
@@ -31,7 +67,8 @@
             "program": "custom_evals/evaluator_alignment.py",
             "console": "integratedTerminal",
             "args": [
-                "--input_path", "custom_evals/data/input_data/evaluator_alignment_data.jsonl",
+                "--input_path",
+                "custom_evals/data/input_data/evaluator_alignment_data.jsonl",
             ]
         },
         {
@@ -41,9 +78,12 @@
             "program": "run_evals/evaluate.py",
             "console": "integratedTerminal",
             "args": [
-                "--evaluator", "marketing_eval",
-                "--output_path", "run_evals/data/output/eval_result_marketing.csv",
-                "--input_path", "run_evals/data/input/qa_answered_by_assistant.jsonl",
+                "--evaluator",
+                "marketing_eval",
+                "--output_path",
+                "run_evals/data/output/eval_result_marketing.csv",
+                "--input_path",
+                "run_evals/data/input/qa_answered_by_assistant.jsonl",
             ]
         }
     ]
