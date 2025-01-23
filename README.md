@@ -1,3 +1,4 @@
+**Note: If you plan to use this repository we highly recommend you to use the 'main' branch. This branch has several quick fixes** 
 
 # AI Assistant Alignment and Evaluation:
 
