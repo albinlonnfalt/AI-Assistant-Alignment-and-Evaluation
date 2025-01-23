@@ -67,8 +67,7 @@
             "program": "custom_evals/evaluator_alignment.py",
             "console": "integratedTerminal",
             "args": [
-                "--input_path",
-                "custom_evals/data/input_data/evaluator_alignment_data.jsonl",
+                "--input_path", "custom_evals/data/input_data/eval_data_processed_with_human_labels.jsonl",
             ]
         },
         {
@@ -79,11 +78,11 @@
             "console": "integratedTerminal",
             "args": [
                 "--evaluator",
-                "marketing_eval",
+                "custom_eval",
                 "--output_path",
-                "run_evals/data/output/eval_result_marketing.csv",
+                "run_evals/data/output/eval_result.csv",
                 "--input_path",
-                "run_evals/data/input/qa_answered_by_assistant.jsonl",
+                "run_evals/data/input/synthetic_eval_data_processed.jsonl",
             ]
         }
     ]

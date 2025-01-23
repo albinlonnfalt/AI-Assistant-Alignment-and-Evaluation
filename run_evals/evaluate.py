@@ -6,7 +6,7 @@ import pandas as pd
 import argparse
 from azure.ai.evaluation import evaluate
 
-from custom_evals.marketing_eval import marketing_eval
+from custom_evals.eval import custom_eval
 
 import json
 
@@ -21,7 +21,7 @@ azure_ai_project = {
 
 # Define a mapping of evaluator names to functions
 evaluators = {
-    'marketing_eval': marketing_eval,
+    'custom_eval': custom_eval,
     # Add more evaluators here
 }
 
@@ -48,10 +48,8 @@ def run_evaluate(args):
                 "evaluator": evaluator,
             },
             evaluator_config={
-                "evaluator": {
-                    "question": "${data.question}",
-                    "answer": "${data.answer}",
-                    "context": "${data.context}",
+                "default": {
+                    "socialMediaPost": "${data.socialmediapost}",
                 },
             },
             #azure_ai_project=azure_ai_project
@@ -85,7 +83,7 @@ def run_evaluate(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate qa bank.')
-    parser.add_argument('--evaluator', type=str, choices=['marketing_eval'], required=True, help='Name of the evaluator to use')
+    parser.add_argument('--evaluator', type=str, choices=['custom_eval'], required=True, help='Name of the evaluator to use')
     parser.add_argument('--output_path', type=str, required=True, help='Path to save the evaluation results as a CSV file')
     parser.add_argument('--input_path', type=str, required=True, help='Path to input data')
 

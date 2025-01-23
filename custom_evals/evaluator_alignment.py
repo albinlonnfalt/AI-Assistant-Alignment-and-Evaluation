@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from sklearn.metrics import cohen_kappa_score
-from custom_evals.marketing_eval import marketing_eval
+from custom_evals.eval import custom_eval
 from azure.ai.evaluation import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,8 +12,7 @@ import pandas as pd
 import json
 import argparse
 
-
-def evaluate_alignment(args):
+def evaluate_alignment(input_data_path):
 
     # If you want to use Azure AI Foundry
     """
@@ -23,18 +22,15 @@ def evaluate_alignment(args):
         "project_name": "xx",
     }
     """
-
     evaluate_results = evaluate(
         data=input_data_path,
         # target=get_response,
         evaluators={
-            "eval": marketing_eval,
+            "eval": custom_eval,
         },
         evaluator_config={
             "default": {
-                "question": "${data.question}",
-                "answer": "${data.answer}",
-                "context": "${data.context}",
+                "socialMediaPost": "${data.socialmediapost}",
             },
         },
         #azure_ai_project=azure_ai_project
@@ -55,11 +51,13 @@ def evaluate_alignment(args):
 
     # Extract human labels to a array
     human_labels = []
-    with open(input_data_path, 'r') as file:
+    with open(input_data_path, 'r', encoding='utf-8', errors='ignore') as file:
         for line in file:
-            json_obj = json.loads(line.strip())
-            human_label = json_obj["human_label"].strip().lower() == 'true'
-            human_labels.append(human_label)
+            try:
+                data = json.loads(line)
+                human_labels.append(data["human_label"])
+            except json.JSONDecodeError:
+                continue
 
     kappa = cohen_kappa_score(human_labels, evaluator_labels)
 
@@ -87,9 +85,9 @@ def evaluate_alignment(args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Evaluate alignment")
-    parser.add_argument("--input_path", type=str, help="Path to the input data file", default="custom_evals/data/input_data/evaluator_alignment_data.jsonl")
+    parser.add_argument("--input_path", type=str, help="Path to the input data file", default="custom_evals/data/input_data/eval_data_processed_human_label.jsonl")
     args = parser.parse_args()
 
     input_data_path = args.input_path
 
-    evaluate_alignment(args)
+    evaluate_alignment(input_data_path)

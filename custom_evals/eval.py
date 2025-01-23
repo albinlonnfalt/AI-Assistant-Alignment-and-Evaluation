@@ -10,17 +10,14 @@ from dotenv import load_dotenv
 load_dotenv()
 from typing import TypedDict
 
-class MarketingEvalOutput(TypedDict):
+class EvalOutput(TypedDict):
   aligned: str
   reason: str
 
 @trace
-def marketing_eval(    
-      question: str,
-      answer: str,
-      context: str,
-      #human_label # Only for develpment. Remove later
-) -> MarketingEvalOutput:
+def custom_eval(    
+      socialmediapost: str,
+) -> EvalOutput:
 
   # execute the prompty file
   model_config = {
@@ -30,11 +27,9 @@ def marketing_eval(
   }
 
   result = prompty.execute(
-    "detect_inapproperate_marketing.prompty", 
+    "eval.prompty", 
     inputs={
-      "question": question,
-      "answer": answer,
-      "context": context
+      "socialMediaPost": socialmediapost
     },
     configuration=model_config
   )

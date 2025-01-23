@@ -1,0 +1,15 @@
+{
+  "package": {},
+  "code": {
+    "eval.prompty": {
+      "type": "llm",
+      "inputs": {
+        "socialMediaPost": {
+          "type": [
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}

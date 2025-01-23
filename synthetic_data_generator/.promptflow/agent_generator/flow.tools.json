@@ -1,0 +1,45 @@
+{
+  "package": {},
+  "code": {
+    "agent_generator.prompty": {
+      "type": "llm",
+      "inputs": {
+        "context": {
+          "type": [
+            "string"
+          ]
+        },
+        "topic": {
+          "type": [
+            "object"
+          ]
+        },
+        "tone": {
+          "type": [
+            "string"
+          ]
+        },
+        "language": {
+          "type": [
+            "string"
+          ]
+        },
+        "additional_instructions": {
+          "type": [
+            "string"
+          ]
+        },
+        "question_length": {
+          "type": [
+            "number"
+          ]
+        },
+        "agent_definitions": {
+          "type": [
+            "object"
+          ]
+        }
+      }
+    }
+  }
+}
