@@ -20,7 +20,8 @@
                 "--instructions_file", "synthetic_data_generator/config/additional_instructions.json",
                 "--languages_file", "synthetic_data_generator/config/languages.json",
                 "--context_file", "synthetic_data_generator/config/context.txt",
-                "--number_of_generated_rows", "5",
+                "--length_config_file", "synthetic_data_generator/config/response_lengh_distrubution.json",
+                "--number_of_generated_rows", "1",
                 "--output_file", "synthetic_data_generator/output/synthetic_data.json"
             ]
         },

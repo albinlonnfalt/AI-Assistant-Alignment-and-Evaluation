@@ -1,19 +1,26 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from sklearn.metrics import cohen_kappa_score
-from custom_evals.marketing_eval import marketing_eval
-from azure.ai.evaluation import evaluate
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import confusion_matrix
-import pandas as pd
-import json
 import argparse
+import json
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from azure.ai.evaluation import evaluate
+from sklearn.metrics import cohen_kappa_score
+from sklearn.metrics import confusion_matrix
+from custom_evals.marketing_eval import marketing_eval
+
 
 
 def evaluate_alignment(args):
+    """
+    Evaluates the alignment of the custom evaluator
+    Args:
+        args (dict): A dictionary of arguments including input data path and other configurations.
+    Returns:
+        None
+    """
 
     # If you want to use Azure AI Foundry
     """
@@ -25,7 +32,7 @@ def evaluate_alignment(args):
     """
 
     evaluate_results = evaluate(
-        data=input_data_path,
+        data=args.input_path,
         # target=get_response,
         evaluators={
             "eval": marketing_eval,
@@ -55,7 +62,7 @@ def evaluate_alignment(args):
 
     # Extract human labels to a array
     human_labels = []
-    with open(input_data_path, 'r') as file:
+    with open(args.input_path, 'r', encoding='utf-8') as file:
         for line in file:
             json_obj = json.loads(line.strip())
             human_label = json_obj["human_label"].strip().lower() == 'true'
@@ -83,13 +90,10 @@ def evaluate_alignment(args):
     plt.title('Confusion Matrix')
     plt.show()
 
-    
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Evaluate alignment")
     parser.add_argument("--input_path", type=str, help="Path to the input data file", default="custom_evals/data/input_data/evaluator_alignment_data.jsonl")
     args = parser.parse_args()
-
-    input_data_path = args.input_path
 
     evaluate_alignment(args)
