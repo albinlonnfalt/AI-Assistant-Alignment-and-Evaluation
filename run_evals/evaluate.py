@@ -1,14 +1,13 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import pandas as pd
 import argparse
+import json
+import pandas as pd
 from azure.ai.evaluation import evaluate
-
 from custom_evals.marketing_eval import marketing_eval
 
-import json
+
 
 # If you want to use Azure AI Foundry
 """
@@ -27,6 +26,20 @@ evaluators = {
 
 # Parse the string column into dictionaries
 def safe_json_loads(x):
+    """
+    Safely loads a JSON string.
+
+    This function attempts to parse a JSON string and return the corresponding
+    Python object. If the input string is not valid JSON, it catches the 
+    json.JSONDecodeError, prints an error message, and returns None.
+
+    Args:
+        x (str): The JSON string to be parsed.
+
+    Returns:
+        dict or list or None: The parsed Python object if the input is valid JSON,
+                              otherwise None.
+    """
     try:
         return json.loads(x)
     except json.JSONDecodeError as e:
@@ -35,6 +48,27 @@ def safe_json_loads(x):
 
 
 def run_evaluate(args):
+    """
+    Runs the evaluation process based on the provided arguments.
+    Args:
+        args: An object containing the following attributes:
+            - evaluator: The name of the evaluator to be used.
+            - input_path: The path to the input data file.
+            - output_path: The path where the output CSV file will be saved.
+    Returns:
+        None
+    The function performs the following steps:
+        1. Selects the evaluator based on the provided arguments.
+        2. Runs the evaluation using the selected evaluator and input data.
+        3. Parses the evaluation results into a DataFrame.
+        4. Prints the number of rows and null values in the 'outputs.evaluator.output' column.
+        5. Drops rows with null values in the 'outputs.evaluator.output' column.
+        6. Parses the 'outputs.evaluator.output' column from strings to dictionaries.
+        7. Creates new columns 'chain of thought' and 'following guidelines' from the parsed data.
+        8. Saves the entire dataset with flagged entries to a CSV file at the specified output path.
+    Raises:
+        Exception: If an error occurs during the evaluation process, it prints an error message and returns an empty result.
+    """
 
     # Select evaluator
     evaluator = evaluators.get(args.evaluator)
