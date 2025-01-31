@@ -10,6 +10,8 @@ model:
   parameters:
     max_tokens: 2000
     temperature: 1
+    response_format: 
+     type: json_object
 inputs:
   prompt:
     type: string
@@ -35,7 +37,7 @@ Make sure to answer with the entier prompt. Answer with the prompt, nothing else
 You are only allowed to change the guidlines in the prompt.
 
 # Important notes:
-You are not allowed to change th output format of the prompt prompt you modify. It should always be in the following format:
+You are not allowed to change th output format of the prompt you modify. It should always be in the following format:
 
 {
 
@@ -43,6 +45,15 @@ You are not allowed to change th output format of the prompt prompt you modify. 
   "following guidelines": false
   
 }
+
+You are not allowed to change this part of the prompt you modify. It should always be in the following format:
+"**Conversation:**
+
+User: {{question}}
+
+Context: {{context}}
+
+Chatbot: {{answer}}"
 
 # The Prompt:
 {{prompt}}
@@ -53,4 +64,12 @@ You are not allowed to change th output format of the prompt prompt you modify. 
 # Example Results:
 {{example_results}}
 
-Provide the new improved prompt as 'new prompt' key in the json object. The 'chain of thought' key should contain the reasoning behind the changes you made to the prompt.
+Provide the complete new improved prompt as 'new prompt' key in the json object. The 'chain of thought' key should contain the reasoning behind the changes you made to the prompt.
+
+Output format the following json object:
+
+{
+  "chain of thought": "...",
+  "new prompt": "..."
+}
+  

@@ -76,8 +76,8 @@ class MCTSTree:
         for node in nodes_traversed:
             node.visits += 1
         return current_node
-    
-    def _uct_select(node: MCTSNode, c=1.41):
+
+    def _uct_select(self, node: MCTSNode, c=1.41):
         best_child = None
         best_uct_value = -float('inf')
         for child in node.get_children():
@@ -89,9 +89,10 @@ class MCTSTree:
                 best_child = child
         return best_child
     
-    def _expand_node(self, node):
+    def _expand_node(self, node: MCTSNode):
         # Generate new prompts
-        new_prompts = sample_new_prompts(node.prompt, node.results_benchmarked, number=2)
+        # TODO: Use chain of thoughts in the ploted tree
+        new_prompts, chain_of_thougths = sample_new_prompts(node.prompt, node.results_benchmarked, number=2)
         for prompt in new_prompts:
             
             new_prompt_path = f"custom_evals/self_improvment/mutated_prompts/{uuid.uuid4()}.prompty"
@@ -160,7 +161,7 @@ def get_eval(prompt_path, data_path):
     return eval_result
 
 def write_to_prompty_file(file_path, content):
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write(content)
 
 def sample_results(results, number_of_correct_samples=1, number_of_incorrect_samples=1):
@@ -174,19 +175,31 @@ def sample_results(results, number_of_correct_samples=1, number_of_incorrect_sam
     return samples.to_json(orient='records')
 
 def load_prompty_as_string(prompt_path):
-    with open(prompt_path, 'r') as file:
+    with open(prompt_path, 'r', encoding='utf-8') as file:
         prompty_content = file.read()
     return prompty_content
+
+def remove_llm_config_from_prompty_and_load_it(prompty_path):
+    prompty_str = load_prompty_as_string(prompty_path)
+    llm_config = load_txt_file("custom_evals/prompty_config.txt")
+    prompty_instructions = prompty_str.replace(llm_config, "")
+    return prompty_instructions
+
+def add_llm_config_to_prompty_str(prompty_content):
+    llm_config = load_txt_file("custom_evals/prompty_config.txt")
+    return llm_config + "\n" + prompty_content
+
 
 def sample_new_prompts(prompt_to_expand, results, number=2):
 
     mutated_prompts = []
+    chain_of_thought = []
     for i in range(0, number):
         # execute the prompty file
         result = prompty.execute(
         "self_improver.prompty",  #----- TODO: Fix to a variable -----------
         inputs={
-            "prompt": load_prompty_as_string(prompt_to_expand),
+            "prompt": remove_llm_config_from_prompty_and_load_it(prompt_to_expand),
             "example_results": sample_results(results, 1, 1)
         },
         configuration=model_config
@@ -194,9 +207,10 @@ def sample_new_prompts(prompt_to_expand, results, number=2):
 
         result_dict = json.loads(result)
 
-        mutated_prompts.append(result_dict['new prompt'])
+        mutated_prompts.append(add_llm_config_to_prompty_str(result_dict['new prompt']))
+        chain_of_thought.append(result_dict['chain of thought'])
 
-    return mutated_prompts
+    return mutated_prompts, chain_of_thought
 
 def compare_to_human_labels(results, human_labels):
     results['human_label'] = human_labels
@@ -230,12 +244,17 @@ def get_auc(results):
 
 def get_human_labels(input_data):
     human_labels = []
-    with open(input_data, 'r') as file:
+    with open(input_data, 'r', encoding='utf-8') as file:
         for line in file:
             json_obj = json.loads(line.strip())
             human_label = json_obj["human_label"] == True
             human_labels.append(human_label)
     return human_labels
+
+def load_txt_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content
 
 def plot_mcts_tree(tree):
     G = nx.DiGraph()
@@ -262,7 +281,6 @@ def plot_mcts_tree(tree):
     nx.draw(G, pos, labels=labels, with_labels=True, node_size=5000, node_color='lightblue', arrowsize=20)
     plt.show()
 
-
 if __name__ == "__main__":
 
     result = get_eval(seed_prompt_path, input_data)
@@ -286,4 +304,3 @@ if __name__ == "__main__":
     plot_mcts_tree(mctsTree)
 
     print(best_prompt)
-
