@@ -15,14 +15,11 @@
             "program": "synthetic_data_generator/data_generator.py",
             "console": "integratedTerminal",
             "args": [
-                "--topics_file", "synthetic_data_generator/config/topics.json",
-                "--tones_file", "synthetic_data_generator/config/tones.json",
-                "--instructions_file", "synthetic_data_generator/config/additional_instructions.json",
-                "--languages_file", "synthetic_data_generator/config/languages.json",
-                "--context_file", "synthetic_data_generator/config/context.txt",
+                "--injection_folder_path", "synthetic_data_generator/config/injections",
+                "--context_file_path", "synthetic_data_generator/config/context.txt",
                 "--length_config_file", "synthetic_data_generator/config/response_lengh_distrubution.json",
                 "--number_of_generated_rows", "1",
-                "--output_file", "synthetic_data_generator/output/synthetic_data.json"
+                "--output_file_path", "synthetic_data_generator/output/synthetic_data.json"
             ]
         },
         {

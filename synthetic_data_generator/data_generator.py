@@ -9,14 +9,11 @@ import prompty.azure
 from dotenv import load_dotenv
 load_dotenv()
 
-def generate_question(topic, tone, language, additional_instructions, context, question_length, model_config, output_file):
+def generate_question(sampled_items, context, question_length, model_config, output_file):
     """
     Generates a question based on the provided parameters and writes the result to a JSON file.
     Args:
-        topic (str): The topic of the question.
-        tone (str): The tone of the question (e.g., formal, informal).
-        language (str): The language in which the question should be generated.
-        additional_instructions (str): Any additional instructions for generating the question.
+        sampled_items (dict): A dictionary containing the sampled items from the injection data.
         context (str): The context or background information for the question.
         question_length (int): The desired length of the question.
         model_config (dict): Configuration settings for the model used to generate the question.
@@ -24,14 +21,13 @@ def generate_question(topic, tone, language, additional_instructions, context, q
     Returns:
         None
     """
+
+    sampled_items_packaged = package_sampled_items(sampled_items)
     
     result = prompty.execute(
         "data_generator.prompty", 
         inputs={
-            "topic": topic,
-            "tone": tone,
-            "language": language,
-            "additional_instructions": additional_instructions,
+            "sampled_items": sampled_items_packaged,
             "context": context,
             "question_length": question_length
         },
@@ -71,6 +67,20 @@ def write_json_file(file_path, data):
         json.dump(existing_data, file, indent=4)
 
 
+def package_sampled_items(sampled_items) -> str:
+    """
+    Packages the sampled items into a single string for use in the question generation process.
+
+    Args:
+        sampled_items (dict): A dictionary containing the sampled items from the injection data.
+
+    Returns:
+        str: A formatted string containing the sampled items.
+    """
+    # Create a formatted string containing the sampled items
+    formatted_items = "\n\n - ".join([f"{key}: {value}" for key, value in sampled_items.items()])
+    return formatted_items
+
 def load_json_file(file_path):
     """
     Load data from a JSON file.
@@ -79,11 +89,14 @@ def load_json_file(file_path):
         file_path (str): The path to the JSON file.
 
     Returns:
-        dict: The data loaded from the JSON file.
+        data (dict): The data loaded from the JSON file.
+        filename_no_ext (str): The filename without the extension
     """
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
-    return data
+        filename_no_ext = os.path.splitext(os.path.basename(file_path))[0]
+    return data, filename_no_ext
+
 
 def normalize_scores(items: list[dict]) -> list[dict]:
     """
@@ -102,7 +115,7 @@ def normalize_scores(items: list[dict]) -> list[dict]:
         item['normalized score'] = item['frequency score'] / total_score
     return items
 
-def draw_item(items, key):
+def sample_item(items, key):
     """
         Selects an item from a list of dictionaries based on their normalized scores and returns the value associated with the given key.
 
@@ -152,6 +165,21 @@ def get_response_lenght_config(config_path):
 
     return mean, sigma, shift
 
+def loop_files_in_folder(folder_path):
+    """
+    Generator function that yields the full path of each file in the specified folder.
+
+    Args:
+        folder_path (str): The path to the folder containing the files.
+
+    Yields:
+        str: The full path of each file in the folder.
+    """
+    for filename in os.listdir(folder_path):
+        full_path = os.path.join(folder_path, filename)
+        if os.path.isfile(full_path):
+            yield full_path
+
 def generate_data(args):
     """
     Generates synthetic data based on the provided arguments and configuration.
@@ -179,51 +207,43 @@ def generate_data(args):
         "api_key": os.environ["AZURE_OPENAI_KEY"]
     }
 
-    # Read the content of the context file
-    with open(args.context_file, 'r', encoding='utf-8') as file:
-        context_string = file.read()
+    # Try to read the content of the context file, set to empty string if not found
+    try:
+        with open(args.context_file_path, 'r', encoding='utf-8') as file:
+            context_string = file.read()
+    except FileNotFoundError:
+        context_string = ""
 
-    # --Topics--
-    topics = load_json_file(args.topics_file)
-    topics = normalize_scores(topics)
+    injection_generator = loop_files_in_folder(args.injection_folder_path)
 
-    # --Tones--
-    tones = load_json_file(args.tones_file)
-    tones = normalize_scores(tones)
-    
-    # - Additional instructions -
-    additional_instructions = load_json_file(args.instructions_file)
-    additional_instructions = normalize_scores(additional_instructions)
-
-    # --Languages--
-    languages = load_json_file(args.languages_file)
-    languages = normalize_scores(languages)
+    injection_data = {}
+    for injection_file in injection_generator:
+        data, filename_no_ext = load_json_file(injection_file)
+        data_normalized = normalize_scores(data)
+        injection_data[filename_no_ext] = data_normalized
 
     # --Response length config--
     mean, sigma, shift = get_response_lenght_config(args.length_config_file)
 
-    for _ in range(args.number_of_generated_rows):
-        topic = draw_item(topics, "topic")
-        tone = draw_item(tones, "tone")
-        language = draw_item(languages, "language")
-        additional_instruction = draw_item(additional_instructions, "additional instruction")
+    for _ in range(int(args.number_of_generated_rows)):
+        sampled_items = {}
+        for key, value in injection_data.items():
+            sampled_items[key] = sample_item(value, key)
+
         question_length = generate_response_length(mean=mean, sigma=sigma, shift=shift)
 
-        generate_question(topic, tone, language, additional_instruction, context_string, question_length, model_config, args.output_file)
+        generate_question(sampled_items, context_string, question_length, model_config, args.output_file_path)
 
         # Avoid rate limiting
         time.sleep(1)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic data.')
-    parser.add_argument('--topics_file', type=str, required=True, help='Path to the topics JSON file')
-    parser.add_argument('--tones_file', type=str, required=True, help='Path to the tones JSON file')
-    parser.add_argument('--instructions_file', type=str, required=True, help='Path to the additional instructions JSON file')
-    parser.add_argument('--languages_file', type=str, required=True, help='Path to the languages JSON file')
-    parser.add_argument('--context_file', type=str, required=True, help='Path to the context text file')
-    parser.add_argument('--number_of_generated_rows', type=int, required=True, help='Number of rows to generate')
-    parser.add_argument('--output_file', type=str, required=True, help='Path to the output JSON file')
+    parser.add_argument('--injection_folder_path', type=str, required=True, help='Path to the folder containing the files of injections')
+    parser.add_argument('--context_file_path', type=str, required=False, help='Path to the file containing the context')
     parser.add_argument('--length_config_file', type=str, required=True, help='Path to config for response length')
+    parser.add_argument('--number_of_generated_rows', type=str, required=True, help='Number of rows to generate')
+    parser.add_argument('--output_file_path', type=str, required=True, help='Path to output file')
 
     args = parser.parse_args()
 

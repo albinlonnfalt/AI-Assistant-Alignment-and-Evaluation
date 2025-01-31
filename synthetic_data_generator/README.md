@@ -1,5 +1,8 @@
 # Synthetic Data Generator
 
+## **NOTE**
+In this version predetermine config injections are removed. Instead you can specify any file with any file name in the config/injections folder. Every file will be writen and a value from the file will be injected to the data generator. This open up for more use cases. **NOTE** the limitations 1. The namn of the file will be used as a key in the prompt along with the value. This means that the namn of the file must represent the content in a way that the language model understands it. 2. The key must match the filename excluded from the file extentions. For example tone.json most contain -> [{"tone": "...", "frequency score": ..}, ..., {"tone": "...", "frequency score": ..} ].
+
 ## Table of Contents
 
 - [Synthetic Data Generator](#synthetic-data-generator)
