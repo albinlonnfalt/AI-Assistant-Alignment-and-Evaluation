@@ -1,5 +1,8 @@
 # Synthetic Data Generator
 
+## **NOTE**
+In this version predetermine config injections are removed. Instead you can specify any file with any file name in the config/injections folder. Every file will be writen and a value from the file will be injected to the data generator. This open up for more use cases. **NOTE** the limitations 1. The namn of the file will be used as a key in the prompt along with the value. This means that the namn of the file must represent the content in a way that the language model understands it. 2. The key must match the filename excluded from the file extentions. For example tone.json most contain -> [{"tone": "...", "frequency score": ..}, ..., {"tone": "...", "frequency score": ..} ].
+
 ## Table of Contents
 
 - [Synthetic Data Generator](#synthetic-data-generator)
@@ -10,10 +13,7 @@
 - [Configuration and Execution](#configuration-and-execution)
     - [Configuration](#configuration)
         - [context.txt](#contexttxt)
-        - [topics.json](#topicsjson)
-        - [tones.json](#tonesjson)
-        - [languages.json](#languagesjson)
-        - [additional_instructions.json](#additional_instructionsjson)
+        - [injections](#injections)
         - [response_length_distribution.json](#response_length_distributionjson)
     - [Execution](#execution)
 - [Analyzing Generated Data](#analyzing-generated-data)
@@ -48,21 +48,25 @@ The configuration files are located in the `config` folder.
 
 The `context.txt` file provides essential context about the AI system for which the synthetic data generator is creating data. This context can include details about the company developing the system, the intended user environment, and the guidelines the AI system should adhere to.
 
-#### topics.json
+#### injections
 
-The `topics.json` file defines the range of topics that the generated data will cover. These topics should reflect a diverse array of subjects that could be encountered in the production environment. Each topic must include a frequency score, which is normalized and used in a statistical draw to determine how often the topic appears in the prompts.
+The `injections` folder contains JSON files of items to inject into the prompt. The files must follow the schema:
 
-#### tones.json
+```json
+[
+    {"frequency score": 50, "*name of the file without the file extension*": "..."}
+]
+```
 
-The `tones.json` file specifies the variety of tones that the generated data should exhibit. Each tone is assigned a frequency score, which is normalized and used in a statistical draw to determine the likelihood of each tone appearing in the prompts.
+For example, `topic.json` should look like:
 
-#### languages.json
+```json
+[
+    {"frequency score": 40, "topic": "Credit card"}
+]
+```
 
-The `languages.json` file specifies the languages the generated data should include. Each language is assigned a frequency score, which is normalized and used in a statistical draw to determine the likelihood of each language appearing in the prompts.
-
-#### additional_instructions.json
-
-The `additional_instructions.json` file contains supplementary instructions that will be incorporated into the prompts. These instructions can be highly customizable, allowing for significant improvements in the quality of synthetic data. Each instruction is assigned a frequency score, which is normalized and used in a statistical draw to determine how often each instruction appears in the prompts. Be creative with these instructions to maximize the potential of your synthetic data.
+You can add any number of injection files without needing to update any code.
 
 #### response_length_distribution.json
 
