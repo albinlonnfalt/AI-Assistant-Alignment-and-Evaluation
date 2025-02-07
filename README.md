@@ -1,3 +1,12 @@
+# Note
+This branch is tailored to perform recall tests for Azure AI Search. The documentation in the repository is not correct. The docstrings in the code are also incorrect and outdated. Please follow the notebook "run_recall.ipynb". The notebook does three things:
+
+1. Collects chunks from your index.
+2. Generates synthetic questions. The generated questions are designed to be related to a specific chunk.
+3. Tests if the correct chunk is retrieved when the synthetic questions are queried. 
+
+To be able to run the test, you will need to install the Python dependencies in the requirements.txt file and add your secrets to the env_example file. You also need to rename the env_example file to .env.
+
 
 # AI Assistant Alignment and Evaluation:
 
