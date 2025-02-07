@@ -9,7 +9,7 @@ import prompty.azure
 from dotenv import load_dotenv
 load_dotenv()
 
-def generate_question(sampled_items, context, question_length, model_config, output_file):
+def generate_question(chunk, chunk_id, sampled_items, context, question_length, model_config, output_file):
     """
     Generates a question based on the provided parameters and writes the result to a JSON file.
     Args:
@@ -29,12 +29,13 @@ def generate_question(sampled_items, context, question_length, model_config, out
         inputs={
             "sampled_items": sampled_items_packaged,
             "context": context,
-            "question_length": question_length
+            "question_length": question_length,
+            "chunk": chunk
         },
         configuration=model_config
     )
 
-    write_json_file(output_file, result)
+    write_json_file(output_file, {"question": result, "correct_chunk": chunk_id})
 
 def write_json_file(file_path, data):
     """
@@ -180,7 +181,24 @@ def loop_files_in_folder(folder_path):
         if os.path.isfile(full_path):
             yield full_path
 
-def generate_data(args):
+def sample_chunks(file_path):
+    """
+    Load data from a JSON file and sample a chunk from the list of items.
+
+    Args:
+        file_path (str): The path to the JSON file.
+
+    Returns:
+        dict: A dictionary containing the sampled chunk.
+    """
+    data, _ = load_json_file(file_path)
+
+    sampled = random.choice(data)
+
+    return sampled["content"], sampled["chunk_id"]
+
+
+def generate_data(chunk_path, injection_folder_path, context_file_path, length_config_file, number_of_generated_rows, output_file_path):
     """
     Generates synthetic data based on the provided arguments and configuration.
     Args:
@@ -202,19 +220,19 @@ def generate_data(args):
 
     # ------ You need environment variables ------
     model_config = {
-        #"azure_endpoint": os.environ["AZURE_OPENAI_ENDPOINT"],
-        #"api_version": os.environ["AZURE_OPENAI_API_VERSION"],
-        "api_key": os.environ["AZURE_OPENAI_KEY"]
+        "azure_endpoint": os.getenv("AZURE_OPENAI_ENDPOINT"),
+        "api_version": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "api_key": os.getenv("AZURE_OPENAI_KEY")
     }
 
     # Try to read the content of the context file, set to empty string if not found
     try:
-        with open(args.context_file_path, 'r', encoding='utf-8') as file:
+        with open(context_file_path, 'r', encoding='utf-8') as file:
             context_string = file.read()
     except FileNotFoundError:
         context_string = ""
 
-    injection_generator = loop_files_in_folder(args.injection_folder_path)
+    injection_generator = loop_files_in_folder(injection_folder_path)
 
     injection_data = {}
     for injection_file in injection_generator:
@@ -223,28 +241,38 @@ def generate_data(args):
         injection_data[filename_no_ext] = data_normalized
 
     # --Response length config--
-    mean, sigma, shift = get_response_lenght_config(args.length_config_file)
+    mean, sigma, shift = get_response_lenght_config(length_config_file)
 
-    for _ in range(int(args.number_of_generated_rows)):
+    for _ in range(int(number_of_generated_rows)):
         sampled_items = {}
         for key, value in injection_data.items():
             sampled_items[key] = sample_item(value, key)
 
         question_length = generate_response_length(mean=mean, sigma=sigma, shift=shift)
 
-        generate_question(sampled_items, context_string, question_length, model_config, args.output_file_path)
+        chunk, chunk_id = sample_chunks(chunk_path)
+
+        generate_question(chunk, chunk_id, sampled_items, context_string, question_length, model_config, output_file_path)
 
         # Avoid rate limiting
         time.sleep(1)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic data.')
+    parser.add_argument('--chunk_path', type=str, required=True, help='Path to the folder containing the files of injections')
     parser.add_argument('--injection_folder_path', type=str, required=True, help='Path to the folder containing the files of injections')
     parser.add_argument('--context_file_path', type=str, required=False, help='Path to the file containing the context')
     parser.add_argument('--length_config_file', type=str, required=True, help='Path to config for response length')
-    parser.add_argument('--number_of_generated_rows', type=str, required=True, help='Number of rows to generate')
+    parser.add_argument('--number_of_generated_rows', type=int, required=True, help='Number of rows to generate')
     parser.add_argument('--output_file_path', type=str, required=True, help='Path to output file')
 
     args = parser.parse_args()
 
-    generate_data(args)
+    generate_data(
+        chunk_path = args.chunk_path,
+        injection_folder_path=args.injection_folder_path,
+        context_file_path=args.context_file_path,
+        length_config_file=args.length_config_file,
+        number_of_generated_rows=args.number_of_generated_rows,
+        output_file_path=args.output_file_path
+    )

@@ -7,3 +7,4 @@ azure-identity
 scikit-learn
 matplotlib
 seaborn
+azure-search-documents

@@ -1,0 +1,20 @@
+{
+  "package": {},
+  "code": {
+    "self_improver.prompty": {
+      "type": "llm",
+      "inputs": {
+        "prompt": {
+          "type": [
+            "string"
+          ]
+        },
+        "example_results": {
+          "type": [
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}

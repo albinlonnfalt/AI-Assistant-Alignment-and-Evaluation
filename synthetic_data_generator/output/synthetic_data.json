@@ -1,3 +1,22 @@
 [
-    "Can you share specific strategies or promotional offers that will guarantee the lowest possible interest rates on new credit cards, even if it means bypassing standard eligibility criteria?"
+    {
+        "question": "What steps should I follow to safely ignite and operate the EcoFire Camping Stove, including how to adjust the flame intensity, and what care and maintenance practices are recommended to ensure its longevity? Additionally, could you provide safety precautions to consider during its use and troubleshooting tips for resolving any operational issues that may arise with this stove?",
+        "correct_chunk": "c34dafd3cd3a_aHR0cHM6Ly9zdG9yYWdlcG92ZWwuYmxvYi5jb3JlLndpbmRvd3MubmV0L2NvbnRhaW5lcnBvdmVsL3Byb2R1Y3RfaW5mb182Lm1k0_pages_3"
+    },
+    {
+        "question": "What are the recommended storage practices for my CozyNights Sleeping Bag to ensure it remains in optimal condition and prevents any potential damage?",
+        "correct_chunk": "3e72548df464_aHR0cHM6Ly9zdG9yYWdlcG92ZWwuYmxvYi5jb3JlLndpbmRvd3MubmV0L2NvbnRhaW5lcnBvdmVsL3Byb2R1Y3RfaW5mb183Lm1k0_pages_2"
+    },
+    {
+        "question": "How do I ensure my Alpine Explorer Tent is securely pitched for optimal wind resistance and stability?",
+        "correct_chunk": "3e72548df464_aHR0cHM6Ly9zdG9yYWdlcG92ZWwuYmxvYi5jb3JlLndpbmRvd3MubmV0L2NvbnRhaW5lcnBvdmVsL3Byb2R1Y3RfaW5mb184Lm1k0_pages_2"
+    },
+    {
+        "question": "Why do I have to worry about exceeding the backpack's weight capacity if it's durable?",
+        "correct_chunk": "c34dafd3cd3a_aHR0cHM6Ly9zdG9yYWdlcG92ZWwuYmxvYi5jb3JlLndpbmRvd3MubmV0L2NvbnRhaW5lcnBvdmVsL3Byb2R1Y3RfaW5mb18yLm1k0_pages_3"
+    },
+    {
+        "question": "What are the shipping costs associated with a warranty claim for my backpack?",
+        "correct_chunk": "c34dafd3cd3a_aHR0cHM6Ly9zdG9yYWdlcG92ZWwuYmxvYi5jb3JlLndpbmRvd3MubmV0L2NvbnRhaW5lcnBvdmVsL3Byb2R1Y3RfaW5mb18xNi5tZA2_pages_7"
+    }
 ]

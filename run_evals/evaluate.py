@@ -5,7 +5,7 @@ import argparse
 import json
 import pandas as pd
 from azure.ai.evaluation import evaluate
-from custom_evals.marketing_eval import marketing_eval
+from custom_evals.recall_eval import marketing_eval
 
 
 

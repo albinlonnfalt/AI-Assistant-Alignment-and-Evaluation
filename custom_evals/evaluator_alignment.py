@@ -9,7 +9,7 @@ import seaborn as sns
 from azure.ai.evaluation import evaluate
 from sklearn.metrics import cohen_kappa_score
 from sklearn.metrics import confusion_matrix
-from custom_evals.marketing_eval import marketing_eval
+from custom_evals.recall_eval import marketing_eval
 
 
 

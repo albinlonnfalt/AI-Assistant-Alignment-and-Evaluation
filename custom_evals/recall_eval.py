@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # pylint: disable=C0115
-class MarketingEvalOutput(TypedDict):
+class recall_eval(TypedDict):
     aligned: str
     reason: str
 

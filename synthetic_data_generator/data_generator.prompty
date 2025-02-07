@@ -12,24 +12,20 @@ model:
     temperature: 0.9
     frequency_penalty: 0.5
 inputs:
+  sampled_items:
+    type: string
   context:
-    type: string
-  topic:
-    type: object
-  tone:
-    type: string
-  language:
-    type: string
-  additional_instructions:
     type: string
   question_length:
     type: number
+  chunk:
+    type: string
 sample:
+    sampled_items: "topic: customer service \n\n tone: friendly \n\n language: english \n\n additional instructions: Ask two questions in the same text"
     context: "A customer service chat"
-    topic: "customer service"
-    tone: "friendly"
-    language: "english"
     additional_instructions: "Please make sure the questions are relevant to the topic and are in a friendly tone."
+    question_length: 10
+    chunk: "THIS IS A SAMPLE CHUNK"
 ---
 system:
 You are an AI assistant. You task is to generate potential questions to a customer service chat. Be very creative and try to think of all possible questions that a customer might ask. 
@@ -38,14 +34,17 @@ Answer only with the question. Do not include anything else in your response.
 
 You are only allowed to answer with one question.
 
+Your job is to generate a question that can be answered in the chunk provided. It is very important that the question can be answered by the chunk.
+
 user:
 
 # Context:
 {{context}}
 
 # Question Guidelines:
-- The generated questions should be related to the topic of {{topic}}
-- The tone of the questions should be {{tone}}
-- The questions should be in {{language}}
-- Additional instructions {{additional_instructions}}
-- The question should be apprxiately {{question_length}} words long
+{{sampled_items}}
+
+# chunk:
+{{chunk}}
+
+The question should be apprxiately {{question_length}} words long
